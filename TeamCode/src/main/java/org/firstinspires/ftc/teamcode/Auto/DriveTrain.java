@@ -46,6 +46,8 @@ public class DriveTrain {
     public void turnPID(/*add parameters*/){
         // Difficulty: HARD
         // Optional: Krish
+        // Not required but feel free to add additional components like
+        // feedforward, integral limit, or a low pass filter if you want to
         // Add telemetry
     }
 
