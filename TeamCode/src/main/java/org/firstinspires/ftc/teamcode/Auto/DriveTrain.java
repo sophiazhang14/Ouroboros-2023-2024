@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class DriveTrain {
 
@@ -81,13 +85,13 @@ public class DriveTrain {
         }
         kill();
         // Add telemetry
-        telemetry.addData("bl:" + bl.getCurrentPosition())
-        telemetry.addData("fl:" + fl.getCurrentPosition())
-        telemetry.addData("br:" + br.getCurrentPosition())
-        telemetry.addData("fr:" + fr.getCurrentPosition())
+        telemetry.addLine("" + bl.getCurrentPosition());
+        telemetry.addLine("" + fl.getCurrentPosition());
+        telemetry.addLine("" + br.getCurrentPosition());
+        telemetry.addLine("" + fr.getCurrentPosition());
     }
 
-    public void encoderTurn(boolean isRight, double power, double distance, double runtime){
+    public void encoderTurn(boolean isForward  , double power, double distance, double runtime){
         // Difficulty: MEDIUM
         // Krish
         ElapsedTime time = new ElapsedTime();
@@ -112,10 +116,10 @@ public class DriveTrain {
         }
         kill();
         // Add telemetry
-        telemetry.addData("bl:" + bl.getCurrentPosition())
-        telemetry.addData("fl:" + fl.getCurrentPosition())
-        telemetry.addData("br:" + br.getCurrentPosition())
-        telemetry.addData("fr:" + fr.getCurrentPosition())
+        telemetry.addLine("bl:" + bl.getCurrentPosition());
+        telemetry.addLine("fl:" + fl.getCurrentPosition());
+        telemetry.addLine("br:" + br.getCurrentPosition());
+        telemetry.addLine("fr:" + fr.getCurrentPosition());
         // Add telemetry
     }
 
