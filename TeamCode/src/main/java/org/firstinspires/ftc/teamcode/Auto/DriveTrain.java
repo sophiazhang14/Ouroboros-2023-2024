@@ -86,19 +86,20 @@ public class DriveTrain {
                 fr.setPower(-power);
                 fl.setPower(-power);
             }
+
+            telemetry.addLine("" + bl.getCurrentPosition());
+            telemetry.addLine("" + fl.getCurrentPosition());
+            telemetry.addLine("" + br.getCurrentPosition());
+            telemetry.addLine("" + fr.getCurrentPosition());
+            telemetry.addLine("" + movement);
         }
         kill();
         // Add telemetry
-        telemetry.addLine("" + bl.getCurrentPosition());
-        telemetry.addLine("" + fl.getCurrentPosition());
-        telemetry.addLine("" + br.getCurrentPosition());
-        telemetry.addLine("" + fr.getCurrentPosition());
-
         // Sophia: you need to update the telemetry everytime it runs through the loop
         // Sophia: Also you need to put the telemetry inside the loop or all it will show is the final position
     }
 
-    public void encoderTurn(boolean isForward, double power, double distance, double runtime){
+    public void encoderTurn(boolean turnLeft, double power, double distance, double runtime){
         // Difficulty: MEDIUM
         // Krish
         ElapsedTime time = new ElapsedTime();
@@ -109,7 +110,7 @@ public class DriveTrain {
         while (time.seconds() < runtime && movement < distance && opMode.opModeIsActive()){
             movement = (bl.getCurrentPosition() + br.getCurrentPosition() + fl.getCurrentPosition() + fr.getCurrentPosition())/4;
             // Sophia: can you change the isForward variable to turnLeft to make it more clear
-            if (isForward) {
+            if (turnLeft) {
                 br.setPower(0);
                 bl.setPower(0);
                 fr.setPower(power);
@@ -121,13 +122,14 @@ public class DriveTrain {
                 fr.setPower(0);
                 fl.setPower(0);
             }
+            telemetry.addLine("bl:" + bl.getCurrentPosition());
+            telemetry.addLine("fl:" + fl.getCurrentPosition());
+            telemetry.addLine("br:" + br.getCurrentPosition());
+            telemetry.addLine("fr:" + fr.getCurrentPosition());
+            telemetry.addLine("movement:" + movement);
         }
         kill();
         // Add telemetry
-        telemetry.addLine("bl:" + bl.getCurrentPosition());
-        telemetry.addLine("fl:" + fl.getCurrentPosition());
-        telemetry.addLine("br:" + br.getCurrentPosition());
-        telemetry.addLine("fr:" + fr.getCurrentPosition());
         // Sophia: You need to update the telemetry everytime it loops through the loop
         // Sophia: Also you need to put the telemetry inside the loop or all it will show is the final position
     }
@@ -141,6 +143,7 @@ public class DriveTrain {
 
 
         // Sophia: NOOO KRISH, GIVE IT A TRYYY D:
+        // Krish: I might later, but I'm sorta doing this entire assignment last second before I go on vacation so i don't really have time
     }
 
     public void kill(){
