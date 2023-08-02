@@ -95,7 +95,7 @@ public class DriveTrain {
         }
         kill();
         // Add telemetry
-        // Sophia: you need to update the telemetry everytime it runs through the loop
+        // Sophia: you need to update the telemetry everytime it runs through the loops
         // Sophia: Also you need to put the telemetry inside the loop or all it will show is the final position
     }
 
