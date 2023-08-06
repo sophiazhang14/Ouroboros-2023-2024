@@ -39,6 +39,29 @@ public class Lift {
         // Assume position 1 is 100 encoders, position 2 is 200 encoders, position 3 is 300 encoders
         // Make sure to check if opmode is active (opMode.opModeIsActive())
         // Add telemetry to check encoder positions
+
+        int targetPosition;
+        switch (position) {                 // this section is just setting the positions to be
+            case 0: targetPosition = 0;     // used later in the code.
+                break;
+            case 1: targetPosition = 100;
+                break;
+            case 2: targetPosition = 200;
+                break;
+            default: targetPosition = 300;
+        }
+
+        if (opMode.opModeIsActive()) {
+            lift.setTargetPosition(targetPosition);
+            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            lift.setPower(0.5); // this should be adjusted based on our lift.
+
+            while (opMode.opModeIsActive() && lift.isBusy()); {
+                opMode.telemetry.addData("Target Position", targetPosition);
+                opMode.telemetry.addData("Current Position", lift.getCurrentPosition());
+                opMode.telemetry.update();
+            }
+        }
     }
 
     public void moveDown(int position){
@@ -47,6 +70,21 @@ public class Lift {
         // Bring lift position all the way down
         // Make sure to check if opmode is active (opMode.opModeIsActive())
         // Assume starting position is 0 encoders
+
+        int targetPosition = 0;  // tells the lift where it needs to be (all the way down)
+
+        if (opMode.opModeIsActive()) {
+            lift.setTargetPosition(lift.getTargetPosition());
+            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            lift.setPower(-0.5); // this should be changed based on our lift
+
+            while (opMode.opModeIsActive() && lift.isBusy()) {
+                opMode.telemetry.addData("Target Position", targetPosition);
+                opMode.telemetry.addData("Current Position", lift.getCurrentPosition());
+                opMode.telemetry.update();
+            }
+            lift.setPower(0.0); // stops motor once lift reaches the bottom
+        }
     }
 
     public void movePID(int position, double kp, double ki, double kd){

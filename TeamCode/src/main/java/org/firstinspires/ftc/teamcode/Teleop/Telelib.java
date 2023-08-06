@@ -15,8 +15,8 @@ public abstract class Telelib extends OpMode {
     public void init(){
         // Difficulty: EASY
         // All: Hardware map your motors and servos
-        motorLift = hardwareMap.get(DcMotor.class, "lift_motor");
-        clawServo = hardwareMap.get(Servo.class, "claw_servo");
+        motorLift = hardwareMap.get(DcMotor.class, "motorLift");
+        clawServo = hardwareMap.get(Servo.class, "clawServo");
 
         // Difficulty: EASY
         // All: Set your motors' zero power behavior
@@ -37,7 +37,7 @@ public abstract class Telelib extends OpMode {
         // Phoenix
         // Assume we are using the same button to open and close the claw
         double currentPos = clawServo.getPosition(); // var used to track the state of the claw
-        if (gamepad1.a && currentPos == 0.0) {
+        if (gamepad2.a && currentPos == 0.0) {
             clawServo.setPosition(1.0); // fully open
         } else {
             clawServo.setPosition(0.0); // fully closed
@@ -49,16 +49,11 @@ public abstract class Telelib extends OpMode {
         // Phoenix
         // Assume we are using one motor to power the lift
         // Assume we are using the joysticks to control the lift
-        double liftPower = gamepad1.right_stick_y; // uses the right joystick to control the lift
-        motorLift.setPower(liftPower);
-
-        // sophia: it looks great! its completely fine if you didn't know this
-        // but usually when we code methods for teleop, we try not to make them super sensitive to the controls
-        // ie. for lifts, instead of making it move if the controls are exactly at zero (also in case if the gamepad isn't
-        // in super great condition) we usually only make the motors move if the gamepad controls are above a certain value
-        // ex. if (Math.abs(gamepad2.right_stick_y) > .3)
-        // also gamepad1 is for drivetrain controls and gamepad 2 is for manipulator controls, so for your 2 telelib methods
-        // can you switch them to gamepad2?
+        if (Math.abs(gamepad2.right_stick_y) > .3) {
+            motorLift.setPower(0.25);
+        } else if (Math.abs(gamepad2.right_stick_y) < -0.3) {
+            motorLift.setPower(-0.25);
+        }
     }
 
     public void kill(){
