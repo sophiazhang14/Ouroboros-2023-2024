@@ -49,19 +49,12 @@ public abstract class Telelib extends OpMode {
         // Phoenix
         // Assume we are using one motor to power the lift
         // Assume we are using the joysticks to control the lift
-        if (Math.abs(gamepad2.right_stick_y) > .3) {
-            motorLift.setPower(0.25);
-        } else if (Math.abs(gamepad2.right_stick_y) < -0.3) {
-            // sophia: Math.abs makes the value always positive, so we would never be able to reach this code
-            // if you use Math.abs(), you would only need one if statement
-            // ie. if(Math.abs(gamepad2.right_stick_y) > .3){motorLift.setPower(gamepad2.right_stick_y);}
-            // or if(Math.abs(gamepad2.right_stick_y) > .3){motorLift.setPower(Math.signum(gamepad2.right_stick_y) * .25;}
-            // Math.signum() returns -1 or 1 based on whether the number in the () is pos or neg
-            motorLift.setPower(-0.25);
-        }
 
-        //sophia: you want to make sure to set your motor's power back to zero so it stops moving if
-        // we are not moving the joystick (add an else statement)
+        if(Math.abs(gamepad2.right_stick_y) > .3) {
+            motorLift.setPower(Math.signum(gamepad2.right_stick_y) * .25);
+        } else {
+            motorLift.setPower(0.0);
+        }
     }
 
     public void kill(){

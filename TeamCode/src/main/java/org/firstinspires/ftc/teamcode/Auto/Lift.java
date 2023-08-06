@@ -76,13 +76,7 @@ public class Lift {
         if (opMode.opModeIsActive()) {
             lift.setTargetPosition(lift.getTargetPosition());
             lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift.setPower(-0.5); // this should be changed based on our lift
-
-            // sophia: both your methods look great! when I assigned you this, I totally thought you were
-            // going to approach it a different way, but you went for the more advanced way which is great!
-            // how you are doing it right now, you can actually combine the move up and down methods into one
-            // because when you set power, the RUN_TO_POSITION line above actually already determines the direction
-            // the motor will move so your power should be set to .5 no matter if it is going up or down.
+            lift.setPower(.5); // this should be changed based on our lift
 
             while (opMode.opModeIsActive() && lift.isBusy()) {
                 opMode.telemetry.addData("Target Position", targetPosition);
