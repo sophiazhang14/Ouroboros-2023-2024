@@ -51,6 +51,14 @@ public abstract class Telelib extends OpMode {
         // Assume we are using the joysticks to control the lift
         double liftPower = gamepad1.right_stick_y; // uses the right joystick to control the lift
         motorLift.setPower(liftPower);
+
+        // sophia: it looks great! its completely fine if you didn't know this
+        // but usually when we code methods for teleop, we try not to make them super sensitive to the controls
+        // ie. for lifts, instead of making it move if the controls are exactly at zero (also in case if the gamepad isn't
+        // in super great condition) we usually only make the motors move if the gamepad controls are above a certain value
+        // ex. if (Math.abs(gamepad2.right_stick_y) > .3)
+        // also gamepad1 is for drivetrain controls and gamepad 2 is for manipulator controls, so for your 2 telelib methods
+        // can you switch them to gamepad2?
     }
 
     public void kill(){
