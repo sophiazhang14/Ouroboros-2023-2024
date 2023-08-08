@@ -14,7 +14,10 @@ public abstract class Telelib extends OpMode {
     public DcMotor bl;
     public DcMotor br;
     public Servo lift;
+    public DcMotor motorLift;
+    public Servo clawServo;
 
+    @Override
     public void init(){
         // Difficulty: EASY
         // All: Hardware map your motors and servos
@@ -24,12 +27,16 @@ public abstract class Telelib extends OpMode {
         br = hardwareMap.get(DcMotor.class, "br");
         lift = hardwareMap.get(Servo.class, "lift");
 
+        motorLift = hardwareMap.get(DcMotor.class, "motorLift");
+        clawServo = hardwareMap.get(Servo.class, "clawServo");
+
         // Difficulty: EASY
         // All: Set your motors' zero power behavior
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Difficulty: EASY
         // All: Set your motors' directions
@@ -37,6 +44,7 @@ public abstract class Telelib extends OpMode {
         fr.setDirection(DcMotorSimple.Direction.REVERSE);
         bl.setDirection(DcMotorSimple.Direction.FORWARD);
         br.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorLift.setDirection(DcMotorSimple.Direction.FORWARD);
     }
     public void arcadeDrive(){
         // Difficulty: MEDIUM
@@ -64,6 +72,12 @@ public abstract class Telelib extends OpMode {
         // Difficulty: MEDIUM
         // Phoenix
         // Assume we are using the same button to open and close the claw
+        double currentPos = clawServo.getPosition(); // var used to track the state of the claw
+        if (gamepad2.a && currentPos == 0.0) {
+            clawServo.setPosition(1.0); // fully open
+        } else {
+            clawServo.setPosition(0.0); // fully closed
+        }
     }
 
     public void lift(){
@@ -72,6 +86,11 @@ public abstract class Telelib extends OpMode {
         // Assume we are using one motor to power the lift
         // Assume we are using the joysticks to control the lift
 
+        if(Math.abs(gamepad2.right_stick_y) > .3) {
+            motorLift.setPower(Math.signum(gamepad2.right_stick_y) * .25);
+        } else {
+            motorLift.setPower(0.0);
+        }
     }
 
     public void kill(){
