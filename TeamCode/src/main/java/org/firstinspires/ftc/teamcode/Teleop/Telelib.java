@@ -13,7 +13,6 @@ public abstract class Telelib extends OpMode {
     public DcMotor fr;
     public DcMotor bl;
     public DcMotor br;
-    public Servo lift;
     public DcMotor motorLift;
     public Servo clawServo;
 
@@ -25,8 +24,6 @@ public abstract class Telelib extends OpMode {
         fr = hardwareMap.get(DcMotor.class, "fr");
         bl = hardwareMap.get(DcMotor.class, "bl");
         br = hardwareMap.get(DcMotor.class, "br");
-        lift = hardwareMap.get(Servo.class, "lift");
-
         motorLift = hardwareMap.get(DcMotor.class, "motorLift");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
 
@@ -40,10 +37,10 @@ public abstract class Telelib extends OpMode {
 
         // Difficulty: EASY
         // All: Set your motors' directions
-        fl.setDirection(DcMotorSimple.Direction.FORWARD);
-        fr.setDirection(DcMotorSimple.Direction.REVERSE);
-        bl.setDirection(DcMotorSimple.Direction.FORWARD);
-        br.setDirection(DcMotorSimple.Direction.REVERSE);
+        fl.setDirection(DcMotorSimple.Direction.REVERSE);
+        fr.setDirection(DcMotorSimple.Direction.FORWARD);
+        bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        br.setDirection(DcMotorSimple.Direction.FORWARD);
         motorLift.setDirection(DcMotorSimple.Direction.FORWARD);
     }
     public void arcadeDrive(){
@@ -54,7 +51,11 @@ public abstract class Telelib extends OpMode {
         double horizontal; // this is a variable
         double pivot; // this is a variable
 
+        // sophia: you can delete your comments for this method. you only need to comment
+        // on stuff that isn't easy to understand right away when you look at it.
+
         // The variables are sent to an important joysticks on gamepad1
+        // sophia: make sure to review any comments you make to ensure they are accurate
         vertical = gamepad1.left_stick_y;
         horizontal = gamepad1.left_stick_x;
         pivot = gamepad1.right_stick_x;
@@ -65,7 +66,12 @@ public abstract class Telelib extends OpMode {
         bl.setPower(pivot + (vertical + horizontal));
         br.setPower(pivot + (vertical - horizontal));
 
+        // sophia: your vertical -/+ horizontal part of your equations are correct, but the strafing part (pivot) is not.
+        // try to use the picture krish sent in the sw channel during our meeting a while ago to fix this.
 
+        // sophia: it's totally ok if you didn't know this before, but to make our robot easier
+        // to control, we usually only move the robot when the joysticks pass a certain value.
+        // ie. if(Math.abs(vertical) > .3 || Math.abs(horizontal) > Math.abs(pivot))
     }
 
     public void claw(){
@@ -102,6 +108,8 @@ public abstract class Telelib extends OpMode {
         bl.setPower(0);
         br.setPower(0);
 
+        // sophia: I pushed pheonix's code for the lift, so you should be able to see it now.
+        // can you also shut off the power for the lift motor as well.
     }
 
 }
