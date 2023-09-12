@@ -17,6 +17,8 @@ public abstract class Telelib extends OpMode {
     public DcMotor motorLift;
     public Servo clawServo;
     public Servo outakeServo;
+    public Servo plane1;
+    public Servo plane2;
 
     @Override
     public void init(){
@@ -29,6 +31,8 @@ public abstract class Telelib extends OpMode {
         motorLift = hardwareMap.get(DcMotor.class, "motorLift");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         outakeServo = hardwareMap.get(Servo.class, "outakeServo");
+        plane1 = hardwareMap.get(Servo.class, "plane1");
+        plane2 = hardwareMap.get(Servo.class, "plane2");
 
         // Difficulty: EASY
         // All: Set your motors' zero power behavior
@@ -46,6 +50,11 @@ public abstract class Telelib extends OpMode {
         br.setDirection(DcMotorSimple.Direction.FORWARD);
         motorLift.setDirection(DcMotorSimple.Direction.FORWARD);
     }
+
+    public void plane(){
+
+    }
+
     public void arcadeDrive(){
         // Difficulty: MEDIUM
         // Elin

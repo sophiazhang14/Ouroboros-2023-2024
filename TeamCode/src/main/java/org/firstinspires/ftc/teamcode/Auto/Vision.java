@@ -117,13 +117,17 @@ public class Vision {
         for (int y = 50; y < bitmap.getHeight(); y += 10){
             for (int x = 0; x < bitmap.getWidth(); x++ ){
                 if (red(bitmap.getPixel(x,y)) < 20 && blue(bitmap.getPixel(x,y)) < 20 && green(bitmap.getPixel(x,y)) < 20){
-                    count += 1;
-                    total += y;
-
+                    list.add(y);
                 }
             }
         }
-        average = total/count;
+
+        for(int i = 0; i < list.size(); i++){
+            total += list.get(i);
+        }
+
+        average = total/list.size();
+
         if (average < 100){
             return 1;
         } else if (average > 200) {
