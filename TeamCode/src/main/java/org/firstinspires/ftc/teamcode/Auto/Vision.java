@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
+import static android.graphics.Color.blue;
+import static android.graphics.Color.green;
+import static android.graphics.Color.red;
+
 import android.graphics.Bitmap;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -11,6 +15,9 @@ import com.vuforia.Vuforia;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class Vision {
     LinearOpMode opMode;
@@ -96,10 +103,35 @@ public class Vision {
         return bm;
     }
 
-    public int sense(){
-        // Anyone who is up for it
-        // Assume we are just trying to sense different colors that correspond to different positions
-        return 0;
+    public int sense() throws InterruptedException {
+
+        double count = 0;
+        double total = 0;
+        double average = 0;
+
+        ArrayList<Integer> list = new ArrayList<>();
+        Bitmap bitmap = getBitmap();
+            bitmap.getHeight();
+            bitmap.getWidth();
+            bitmap.getPixel(50,50);
+        for (int y = 50; y < bitmap.getHeight(); y += 10){
+            for (int x = 0; x < bitmap.getWidth(); x++ ){
+                if (red(bitmap.getPixel(x,y)) < 20 && blue(bitmap.getPixel(x,y)) < 20 && green(bitmap.getPixel(x,y)) < 20){
+                    count += 1;
+                    total += y;
+
+                }
+            }
+        }
+        average = total/count;
+        if (average < 100){
+            return 1;
+        } else if (average > 200) {
+            return 3;
+        } else {
+            return 2;
+        }
+
     }
 
 }
