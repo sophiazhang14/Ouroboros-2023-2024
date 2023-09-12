@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import static android.os.SystemClock.sleep;
 
 public abstract class Telelib extends OpMode {
 
@@ -15,6 +16,7 @@ public abstract class Telelib extends OpMode {
     public DcMotor br;
     public DcMotor motorLift;
     public Servo clawServo;
+    public Servo outakeServo;
 
     @Override
     public void init(){
@@ -26,6 +28,7 @@ public abstract class Telelib extends OpMode {
         br = hardwareMap.get(DcMotor.class, "br");
         motorLift = hardwareMap.get(DcMotor.class, "motorLift");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
+        outakeServo = hardwareMap.get(Servo.class, "outakeServo");
 
         // Difficulty: EASY
         // All: Set your motors' zero power behavior
@@ -79,7 +82,7 @@ public abstract class Telelib extends OpMode {
         // Phoenix
         // Assume we are using the same button to open and close the claw
         double currentPos = clawServo.getPosition(); // var used to track the state of the claw
-        if (gamepad2.a && currentPos == 0.0) {
+        if (gamepad2.right_bumper && currentPos == 0.0) {
             clawServo.setPosition(1.0); // fully open
         } else {
             clawServo.setPosition(0.0); // fully closed
@@ -96,6 +99,18 @@ public abstract class Telelib extends OpMode {
             motorLift.setPower(Math.signum(gamepad2.right_stick_y) * .25);
         } else {
             motorLift.setPower(0.0);
+        }
+    }
+
+    public void outake(){
+        double currentPos = outakeServo.getPosition(); // tracks position of claw
+        if (gamepad2.left_bumper && currentPos == 0.0) { // checks if holding 2
+            outakeServo.setPosition(.5); // deposits first one
+        }
+        else if (currentPos == .5){ // checks if holding one
+            outakeServo.setPosition(1); // deposits second one
+            sleep(3000);
+            outakeServo.setPosition(0); // resets position
         }
     }
 

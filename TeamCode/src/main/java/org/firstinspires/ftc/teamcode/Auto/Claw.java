@@ -9,26 +9,26 @@ public class Claw {
 
     // Difficulty: EASY
     // Elin: Create your servo
-    public Servo claw;
+    public Servo clawServo;
 
     public Claw(LinearOpMode opMode){
         this.opMode = opMode;
 
         // Difficulty: EASY
         // ELin: Hardware Map servo
-        claw = opMode.hardwareMap.servo.get("claw");
+        clawServo = opMode.hardwareMap.servo.get("clawServo");
 
     }
 
     public void openClaw(){
         // Difficulty: EASY
         // Elin
-        claw.setPosition(0);
+        clawServo.setPosition(0);
     }
 
     public void closeClaw(){
         // Difficulty: EASY
         // ELin
-        claw.setPosition(1);
+        clawServo.setPosition(1);
     }
 }
