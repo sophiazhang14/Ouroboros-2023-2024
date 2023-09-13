@@ -4,21 +4,32 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import static android.os.SystemClock.sleep;
+
+import org.firstinspires.ftc.teamcode.ThreadHandler;
 
 public abstract class Telelib extends OpMode {
 
     // Difficulty: EASY
     // All: Create your motors and servos
+    double hPower = 1;
+    double half = 1;
+    boolean halfToggle = false;
     public DcMotor fl;
     public DcMotor fr;
     public DcMotor bl;
     public DcMotor br;
     public DcMotor motorLift;
+    public DcMotor horizontalLift;
     public Servo clawServo;
     public Servo outakeServo;
     public Servo plane1;
     public Servo plane2;
+
+    public ThreadHandler th_horiLift;
+    public ThreadHandler th_arcadeDrive;
 
     @Override
     public void init(){
@@ -33,6 +44,10 @@ public abstract class Telelib extends OpMode {
         outakeServo = hardwareMap.get(Servo.class, "outakeServo");
         plane1 = hardwareMap.get(Servo.class, "plane1");
         plane2 = hardwareMap.get(Servo.class, "plane2");
+        horizontalLift = hardwareMap.get(DcMotor.class, "horizontalLift");
+
+        th_horiLift = new ThreadHandler();
+        th_arcadeDrive = new ThreadHandler();
 
         // Difficulty: EASY
         // All: Set your motors' zero power behavior
@@ -41,6 +56,7 @@ public abstract class Telelib extends OpMode {
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        horizontalLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Difficulty: EASY
         // All: Set your motors' directions
@@ -49,41 +65,82 @@ public abstract class Telelib extends OpMode {
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
         br.setDirection(DcMotorSimple.Direction.FORWARD);
         motorLift.setDirection(DcMotorSimple.Direction.FORWARD);
+        horizontalLift.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
-    public void plane(){
+    Thread horizontal_lift_move = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            ElapsedTime time = new ElapsedTime();
+            time.reset();
+            while(time.milliseconds() < 300){
+            }
+            while(Math.abs(horizontalLift.getCurrentPosition()) < 10){
+                horizontalLift.setPower(hPower);
+            }
+        }
+    });
+
+    Thread full_speed = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            ElapsedTime time = new ElapsedTime();
+            time.reset();
+            while(time.milliseconds() < 300){
+
+            }
+            half = 1;
+            halfToggle = false;
+        }
+    });
+
+    Thread half_speed = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            ElapsedTime time = new ElapsedTime();
+            time.reset();
+            while(time.milliseconds() < 300){
+
+            }
+            half = .5;
+            halfToggle = true;
+        }
+    });
+
+    public void horizontalLift() {
+
+        if(gamepad2.left_stick_y > .1){
+            th_horiLift.queue(horizontal_lift_move);
+        }
 
     }
 
     public void arcadeDrive(){
-        // Difficulty: MEDIUM
-        // Elin
-        // Assume we are using a four motor mecanum drive train
-        double vertical; // this is a variable
-        double horizontal; // this is a variable
-        double pivot; // this is a variable
 
-        // sophia: you can delete your comments for this method. you only need to comment
-        // on stuff that isn't easy to understand right away when you look at it.
+        if (gamepad1.a && halfToggle){
+            th_arcadeDrive.queue(half_speed);
+        }
+        else{
+            th_arcadeDrive.queue(full_speed);
+        }
 
-        // The variables are sent to an important joysticks on gamepad1
-        // sophia: make sure to review any comments you make to ensure they are accurate
-        vertical = gamepad1.left_stick_y;
-        horizontal = gamepad1.left_stick_x;
-        pivot = gamepad1.right_stick_x;
+        double left_stick_x = gamepad1.left_stick_x;
+        double left_stick_y = gamepad1.left_stick_y;
+        double right_stick_x = gamepad1.right_stick_x;
 
-        // These are equations that help move the robot forward, backwards, left, and right
-        fl.setPower(pivot + (vertical - horizontal));
-        fr.setPower(pivot + (vertical + horizontal));
-        bl.setPower(pivot + (vertical + horizontal));
-        br.setPower(pivot + (vertical - horizontal));
-
-        // sophia: your vertical -/+ horizontal part of your equations are correct, but the strafing part (pivot) is not.
-        // try to use the picture krish sent in the sw channel during our meeting a while ago to fix this.
-
-        // sophia: it's totally ok if you didn't know this before, but to make our robot easier
-        // to control, we usually only move the robot when the joysticks pass a certain value.
-        // ie. if(Math.abs(vertical) > .3 || Math.abs(horizontal) > Math.abs(pivot))
+        if (Math.abs(left_stick_x) > 0.1 ||
+                Math.abs(left_stick_y) >.1|| Math.abs(right_stick_x) > 0.1){
+            fr.setPower((left_stick_y + left_stick_x) + right_stick_x);
+            fl.setPower((left_stick_y - left_stick_x) - right_stick_x);
+            br.setPower((left_stick_y - left_stick_x) + right_stick_x);
+            bl.setPower((left_stick_y + left_stick_x) - right_stick_x);
+        }
+        else{
+            fl.setPower(0);
+            fr.setPower(0);
+            br.setPower(0);
+            bl.setPower(0);
+        }
     }
 
     public void claw(){

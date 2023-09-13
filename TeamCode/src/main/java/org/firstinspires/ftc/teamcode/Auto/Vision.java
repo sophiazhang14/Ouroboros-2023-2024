@@ -105,7 +105,6 @@ public class Vision {
 
     public int sense() throws InterruptedException {
 
-        double count = 0;
         double total = 0;
         double average = 0;
 
